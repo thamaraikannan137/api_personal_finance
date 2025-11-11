@@ -52,6 +52,14 @@ app.get("/health", (_req: Request, res: Response) => {
 // API routes
 app.use("/api", routes);
 
+app.get("/", (_req: Request, res: Response) => {
+  res.status(200).json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+});
+
 // 404 handler
 app.use(notFoundHandler);
 
