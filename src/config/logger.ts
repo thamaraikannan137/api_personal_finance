@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import winston from "winston";
 import env from "./env.js";
 
@@ -21,22 +23,46 @@ const consoleFormat = winston.format.combine(
   })
 );
 
-const logger = winston.createLogger({
-  level: env.NODE_ENV === "production" ? "info" : "debug",
-  format: logFormat,
-  defaultMeta: { service: "api-service" },
-  transports: [
-    new winston.transports.File({ filename: "logs/error.log", level: "error" }),
-    new winston.transports.File({ filename: "logs/combined.log" }),
-  ],
-});
+const transports: winston.transport[] = [];
 
 if (env.NODE_ENV !== "production") {
-  logger.add(
+  const logsDir = path.resolve(process.cwd(), "logs");
+  mkdirLogsDir(logsDir);
+
+  transports.push(
+    new winston.transports.File({
+      filename: path.join(logsDir, "error.log"),
+      level: "error",
+    }),
+    new winston.transports.File({
+      filename: path.join(logsDir, "combined.log"),
+    })
+  );
+
+  transports.push(
     new winston.transports.Console({
       format: consoleFormat,
     })
   );
+} else {
+  transports.push(
+    new winston.transports.Console({
+      format: logFormat,
+    })
+  );
+}
+
+const logger = winston.createLogger({
+  level: env.NODE_ENV === "production" ? "info" : "debug",
+  format: logFormat,
+  defaultMeta: { service: "api-service" },
+  transports,
+});
+
+function mkdirLogsDir(directory: string): void {
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+  }
 }
 
 export default logger;
