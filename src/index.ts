@@ -25,7 +25,9 @@ const helmetInitializer: HelmetInitializer =
 app.use(helmetInitializer());
 app.use(
   cors({
-    origin: [env.CORS_ORIGIN, "http://localhost:5173","https://ui-personal-finance.vercel.app"],
+    origin: [env.CORS_ORIGIN, "http://localhost:5173","https://ui-personal-finance.vercel.app","http://ec2-3-109-214-68.ap-south-1.compute.amazonaws.com",
+      "https://ec2-3-109-214-68.ap-south-1.compute.amazonaws.com"
+    ],
     credentials: true,
   })
 );
