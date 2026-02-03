@@ -26,6 +26,7 @@ export interface UpdateLiabilityData {
   institution?: string;
   owner?: string;
   notes?: string;
+  documents?: string[];
   customFields?: any[];
   customCategoryName?: string;
 }
