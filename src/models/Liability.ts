@@ -11,6 +11,7 @@ export interface ILiability extends Document {
   institution?: string;
   owner: string;
   notes?: string;
+  documents?: string[];
   customFields?: {
     id: string;
     name: string;
@@ -72,6 +73,9 @@ const liabilitySchema = new Schema<ILiability>(
       trim: true,
       maxlength: [500, "Notes must be less than 500 characters"],
     },
+    documents: [{
+      type: String,
+    }],
     customFields: [{
       id: String,
       name: String,

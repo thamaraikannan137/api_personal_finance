@@ -2,6 +2,7 @@ import { Router } from "express";
 import liabilityController from "../../controllers/liability.controller.js";
 import { authenticate } from "../../middlewares/auth.middleware.js";
 import { validate } from "../../middlewares/validation.middleware.js";
+import { uploadAssetFiles, parseAssetPayload } from "../../middlewares/upload.middleware.js";
 import {
   createLiabilitySchema,
   updateLiabilitySchema,
@@ -18,14 +19,29 @@ router.get("/", liabilityController.getLiabilities);
 // GET /api/v1/liabilities/summary - Get liability summary (total balance, by category)
 router.get("/summary", liabilityController.getLiabilitySummary);
 
+// DELETE /api/v1/liabilities/documents - Delete a document from a liability (must be before /:id route)
+router.delete("/documents", liabilityController.deleteDocument);
+
 // GET /api/v1/liabilities/:id - Get liability by ID
 router.get("/:id", liabilityController.getLiabilityById);
 
 // POST /api/v1/liabilities - Create new liability
-router.post("/", validate(createLiabilitySchema), liabilityController.createLiability);
+router.post(
+  "/",
+  uploadAssetFiles,
+  parseAssetPayload,
+  validate(createLiabilitySchema),
+  liabilityController.createLiability
+);
 
 // PUT /api/v1/liabilities/:id - Update liability
-router.put("/:id", validate(updateLiabilitySchema), liabilityController.updateLiability);
+router.put(
+  "/:id",
+  uploadAssetFiles,
+  parseAssetPayload,
+  validate(updateLiabilitySchema),
+  liabilityController.updateLiability
+);
 
 // DELETE /api/v1/liabilities/:id - Delete liability
 router.delete("/:id", liabilityController.deleteLiability);

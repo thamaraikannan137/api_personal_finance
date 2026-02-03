@@ -18,6 +18,7 @@ export const createLiabilitySchema = z.object({
   institution: z.string().max(100).optional(),
   owner: z.string().min(1, "Owner is required"),
   notes: z.string().max(500).optional(),
+  documents: z.array(z.string()).optional(),
   customFields: z.array(customFieldSchema).optional(),
   customCategoryName: z.string().optional(),
 });
@@ -31,6 +32,7 @@ export const updateLiabilitySchema = z.object({
   institution: z.string().max(100).optional(),
   owner: z.string().min(1).optional(),
   notes: z.string().max(500).optional(),
+  documents: z.array(z.string()).optional(),
   customFields: z.array(customFieldSchema).optional(),
   customCategoryName: z.string().optional(),
 });

@@ -7,12 +7,18 @@ export interface CreateAssetData {
   name: string;
   category: string;
   value: number;
+  initialValue?: number;
   purchaseDate?: string;
+  endDate?: string;
   location?: string;
   description?: string;
   owner: string;
+  institution?: string;
+  accountNumber?: string;
+  notes?: string;
+  rateOfReturn?: number;
+  monthlyPayment?: number;
   documents?: string[];
-  documentUrl?: string;
   customFields?: any[];
   customCategoryName?: string;
 }
@@ -21,12 +27,18 @@ export interface UpdateAssetData {
   name?: string;
   category?: string;
   value?: number;
+  initialValue?: number;
   purchaseDate?: string;
+  endDate?: string;
   location?: string;
   description?: string;
   owner?: string;
+  institution?: string;
+  accountNumber?: string;
+  notes?: string;
+  rateOfReturn?: number;
+  monthlyPayment?: number;
   documents?: string[];
-  documentUrl?: string;
   customFields?: any[];
   customCategoryName?: string;
 }

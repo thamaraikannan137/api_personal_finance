@@ -37,7 +37,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Logging middleware
-app.use(requestLogger);
+// app.use(requestLogger);
 
 // Rate limiting
 // app.use("/api", apiRateLimiter);

@@ -6,12 +6,18 @@ export interface IAsset extends Document {
   name: string;
   category: string; // Flexible - accepts any category string
   value: number;
+  initialValue?: number; // Original purchase price (to track gain/loss)
   purchaseDate?: string;
+  endDate?: string; // Maturity/end date (for FD, lending, schemes)
   location?: string;
   description?: string;
   owner: string;
+  institution?: string; // Bank/institution name
+  accountNumber?: string; // Account number
+  notes?: string; // Additional notes
+  rateOfReturn?: number; // Interest rate / ROI percentage
+  monthlyPayment?: number; // For monthly investment schemes
   documents?: string[];
-  documentUrl?: string;
   customFields?: {
     id: string;
     name: string;
@@ -50,7 +56,14 @@ const assetSchema = new Schema<IAsset>(
       required: [true, "Value is required"],
       min: [0, "Value must be positive"],
     },
+    initialValue: {
+      type: Number,
+      min: [0, "Initial value must be positive"],
+    },
     purchaseDate: {
+      type: String,
+    },
+    endDate: {
       type: String,
     },
     location: {
@@ -67,13 +80,30 @@ const assetSchema = new Schema<IAsset>(
       required: [true, "Owner is required"],
       trim: true,
     },
-    documents: [{
-      type: String,
-    }],
-    documentUrl: {
+    institution: {
       type: String,
       trim: true,
     },
+    accountNumber: {
+      type: String,
+      trim: true,
+    },
+    notes: {
+      type: String,
+      trim: true,
+      maxlength: [1000, "Notes must be less than 1000 characters"],
+    },
+    rateOfReturn: {
+      type: Number,
+      min: [0, "Rate of return must be positive"],
+    },
+    monthlyPayment: {
+      type: Number,
+      min: [0, "Monthly payment must be positive"],
+    },
+    documents: [{
+      type: String,
+    }],
     customFields: {
       type: [{
         id: { type: String, required: true },
