@@ -1,4 +1,5 @@
 /node_modules
 /dist
+.amplify-hosting
 *.log
 logs/

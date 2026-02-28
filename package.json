@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec tsx src/index.ts",
     "build": "tsc",
+    "postbuild": "chmod +x bin/postbuild.sh && ./bin/postbuild.sh",
     "start": "node dist/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
