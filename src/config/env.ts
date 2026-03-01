@@ -18,6 +18,7 @@ const envSchema = z.object({
   
   // CORS
   CORS_ORIGIN: z.string().default("*"),
+  ADDITIONAL_CORS_ORIGINS: z.string().optional(), // Comma-separated, e.g. for Amplify frontend URL
   
   // Rate Limiting
   RATE_LIMIT_WINDOW_MS: z.string().default("900000"), // 15 minutes
