@@ -29,6 +29,7 @@ app.use(
       env.CORS_ORIGIN,
       "http://localhost:5173",
       "https://ui-personal-finance.vercel.app",
+      "https://aws-p1.d1dmvstp54cq7q.amplifyapp.com", // Amplify frontend
       "http://ec2-3-109-214-68.ap-south-1.compute.amazonaws.com",
       "https://ec2-3-109-214-68.ap-south-1.compute.amazonaws.com",
       ...(env.ADDITIONAL_CORS_ORIGINS?.split(",").map((o) => o.trim()).filter(Boolean) ?? []),
@@ -79,8 +80,8 @@ const startServer = async (): Promise<void> => {
     // Connect to database
     await connectDatabase();
 
-    // Start listening
-    app.listen(env.PORT, () => {
+    // Start listening - bind to 0.0.0.0 for Amplify/container environments
+    app.listen(Number(env.PORT), "0.0.0.0", () => {
       logger.info(`🚀 Server is running on port ${env.PORT}`);
       logger.info(`🌍 Environment: ${env.NODE_ENV}`);
       logger.info(`📡 API available at http://localhost:${env.PORT}/api`);
