@@ -3,10 +3,10 @@ import env from "../config/env.js";
 import { BadRequestError } from "../utils/errors.js";
 
 const s3Client = new S3Client({
-  region: env.AWS_REGION,
+  region: env.S3_REGION,
   credentials: {
-    accessKeyId: env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: env.S3_ACCESS_KEY_ID,
+    secretAccessKey: env.S3_SECRET_ACCESS_KEY,
   },
 });
 
@@ -57,7 +57,7 @@ export const uploadFileToS3 = async (
 
     // Upload to S3
     const uploadParams = {
-      Bucket: env.AWS_S3_BUCKET,
+      Bucket: env.S3_BUCKET,
       Key: fileName,
       Body: file.buffer,
       ContentType: file.mimetype || "application/octet-stream",
@@ -66,7 +66,7 @@ export const uploadFileToS3 = async (
     await s3Client.send(new PutObjectCommand(uploadParams));
 
     // Generate public URL
-    const url = `https://${env.AWS_S3_BUCKET}.s3.${env.AWS_REGION}.amazonaws.com/${fileName}`;
+    const url = `https://${env.S3_BUCKET}.s3.${env.S3_REGION}.amazonaws.com/${fileName}`;
 
     return {
       url,
@@ -100,7 +100,7 @@ export const extractS3KeyFromUrl = (url: string): string | null => {
   try {
     // Format: https://bucket-name.s3.region.amazonaws.com/key/path
     const urlPattern = new RegExp(
-      `https://${env.AWS_S3_BUCKET}\\.s3\\.${env.AWS_REGION}\\.amazonaws\\.com/(.+)`
+      `https://${env.S3_BUCKET}\\.s3\\.${env.S3_REGION}\\.amazonaws\\.com/(.+)`
     );
     const match = url.match(urlPattern);
     return match && match[1] ? match[1] : null;
@@ -116,7 +116,7 @@ export const extractS3KeyFromUrl = (url: string): string | null => {
 export const deleteFileFromS3 = async (key: string): Promise<void> => {
   try {
     const deleteParams = {
-      Bucket: env.AWS_S3_BUCKET,
+      Bucket: env.S3_BUCKET,
       Key: key,
     };
 
