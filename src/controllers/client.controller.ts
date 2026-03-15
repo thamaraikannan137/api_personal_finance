@@ -24,7 +24,12 @@ class ClientController {
       const isActive =
         isActiveParam === "true" ? true : isActiveParam === "false" ? false : undefined;
 
-      const result = await clientService.getClients(req.user.userId, page, limit, search, isActive);
+      const result = await clientService.getClients(req.user.userId, {
+        page,
+        limit,
+        search,
+        isActive,
+      });
       sendSuccess(res, "Clients retrieved successfully", result);
     } catch (error) {
       next(error);

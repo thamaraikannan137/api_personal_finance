@@ -62,9 +62,6 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-// Create index on email for better query performance
-userSchema.index({ email: 1 }, { unique: true });
-
 // Export model
 const User = mongoose.model<IUser>("User", userSchema);
 

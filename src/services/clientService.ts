@@ -50,11 +50,14 @@ class ClientService {
 
   async getClients(
     auditorId: string,
-    page: number = 1,
-    limit: number = 20,
-    search?: string,
-    isActive?: boolean
+    options: {
+      page?: number;
+      limit?: number;
+      search?: string;
+      isActive?: boolean;
+    } = {}
   ): Promise<{ clients: IClient[]; total: number; pages: number }> {
+    const { page = 1, limit = 20, search, isActive } = options;
     const skip = (page - 1) * limit;
     const query: Record<string, unknown> = {
       auditorId: new mongoose.Types.ObjectId(auditorId),

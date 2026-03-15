@@ -1,0 +1,582 @@
+{
+  "info": {
+    "name": "Personal Finance API",
+    "description": "Complete API collection for the Personal Finance / Net Worth Certificate application.\n\n**Setup:**\n1. Set the `baseUrl` variable to your server (e.g. `http://localhost:3000` or your EB URL)\n2. Run **Register** or **Login** — the `accessToken` and `refreshToken` variables are set automatically\n3. All protected routes will use the `accessToken` automatically",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://backend-env.eba-tmms8qpa.ap-south-1.elasticbeanstalk.com", "type": "string" },
+    { "key": "accessToken", "value": "", "type": "string" },
+    { "key": "refreshToken", "value": "", "type": "string" },
+    { "key": "clientId", "value": "", "type": "string" },
+    { "key": "certificateId", "value": "", "type": "string" },
+    { "key": "userId", "value": "", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.accessToken) {",
+                  "  pm.collectionVariables.set('accessToken', res.data.accessToken);",
+                  "  pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"auditor@example.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "register"] }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.accessToken) {",
+                  "  pm.collectionVariables.set('accessToken', res.data.accessToken);",
+                  "  pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"auditor@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.accessToken) {",
+                  "  pm.collectionVariables.set('accessToken', res.data.accessToken);",
+                  "  pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/refresh-token", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "refresh-token"] }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/profile", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "profile"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/users", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users"] }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users", "{{userId}}"] }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"email\": \"jane.doe@example.com\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users", "{{userId}}"] }
+          }
+        },
+        {
+          "name": "Delete User (Admin only)",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/v1/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users", "{{userId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clients",
+      "item": [
+        {
+          "name": "Get All Clients",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients?page=1&limit=20&search=&isActive=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "search", "value": "", "description": "Search by name or PAN" },
+                { "key": "isActive", "value": "true", "description": "true | false" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Client",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.client && res.data.client._id) {",
+                  "  pm.collectionVariables.set('clientId', res.data.client._id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rajesh Kumar\",\n  \"pan\": \"ABCDE1234F\",\n  \"dateOfBirth\": \"1980-05-15\",\n  \"email\": \"rajesh@example.com\",\n  \"phone\": \"9876543210\",\n  \"permanentAddress\": {\n    \"line1\": \"12, MG Road\",\n    \"line2\": \"Sector 5\",\n    \"city\": \"Chennai\",\n    \"state\": \"Tamil Nadu\",\n    \"pincode\": \"600001\"\n  },\n  \"officeAddress\": {\n    \"line1\": \"45, Anna Salai\",\n    \"line2\": \"\",\n    \"city\": \"Chennai\",\n    \"state\": \"Tamil Nadu\",\n    \"pincode\": \"600002\"\n  }\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/clients", "host": ["{{baseUrl}}"], "path": ["api", "v1", "clients"] }
+          }
+        },
+        {
+          "name": "Get Client by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/clients/{{clientId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "clients", "{{clientId}}"] }
+          }
+        },
+        {
+          "name": "Update Client",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rajesh Kumar Updated\",\n  \"phone\": \"9000000001\",\n  \"email\": \"rajesh.updated@example.com\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/clients/{{clientId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "clients", "{{clientId}}"] }
+          }
+        },
+        {
+          "name": "Delete Client",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/v1/clients/{{clientId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "clients", "{{clientId}}"] }
+          }
+        },
+        {
+          "name": "Import Clients (CSV)",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file", "src": "", "description": "Upload a CSV file with client data" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/clients/import", "host": ["{{baseUrl}}"], "path": ["api", "v1", "clients", "import"] }
+          }
+        },
+        {
+          "name": "Get Certificates by Client",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clients/{{clientId}}/certificates?status=draft",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "clients", "{{clientId}}", "certificates"],
+              "query": [{ "key": "status", "value": "draft", "description": "draft | finalized" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Certificates",
+      "item": [
+        {
+          "name": "Create Certificate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.certificate && res.data.certificate._id) {",
+                  "  pm.collectionVariables.set('certificateId', res.data.certificate._id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\": \"{{clientId}}\",\n  \"financialYear\": \"FY 2024-25\",\n  \"asOnDate\": \"2025-03-31\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates"] }
+          }
+        },
+        {
+          "name": "Get Certificate by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}"] }
+          }
+        },
+        {
+          "name": "Get Certificate Summary",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/summary", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "summary"] }
+          }
+        },
+        {
+          "name": "Finalize Certificate",
+          "request": {
+            "method": "PATCH",
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/finalize", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "finalize"] }
+          }
+        },
+        {
+          "name": "Reopen Certificate",
+          "request": {
+            "method": "PATCH",
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/reopen", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "reopen"] }
+          }
+        },
+        {
+          "name": "Delete Certificate",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}"] }
+          }
+        },
+        {
+          "name": "Export Certificate (Excel)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/export/excel", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "export", "excel"] },
+            "description": "Downloads an Excel file. Save the response as a .xlsx file."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Annexure 1 — Immovable Property",
+      "item": [
+        {
+          "name": "Get Annexure 1",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/annexure1", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "annexure1"] }
+          }
+        },
+        {
+          "name": "Save All Annexure 1",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bySelf\": [\n    {\n      \"description\": \"Residential house at Chennai\",\n      \"location\": \"Chennai\",\n      \"registrationNo\": \"REG/2020/001\",\n      \"dateOfAcquisition\": \"2020-01-15\",\n      \"costOfAcquisition\": 5000000,\n      \"marketValue\": 7500000,\n      \"encumbrances\": \"Home loan from SBI\"\n    }\n  ],\n  \"bySharing\": [\n    {\n      \"description\": \"Commercial plot\",\n      \"location\": \"Coimbatore\",\n      \"sharePercentage\": 50,\n      \"costOfAcquisition\": 2000000,\n      \"marketValue\": 3000000,\n      \"encumbrances\": \"\"\n    }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/annexure1", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "annexure1"] }
+          }
+        },
+        {
+          "name": "Add Row to Annexure 1 (bySelf)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"New flat in Mumbai\",\n  \"location\": \"Mumbai\",\n  \"registrationNo\": \"REG/2024/999\",\n  \"dateOfAcquisition\": \"2024-06-01\",\n  \"costOfAcquisition\": 8000000,\n  \"marketValue\": 9500000,\n  \"encumbrances\": \"None\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/annexure1/bySelf",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "certificates", "{{certificateId}}", "annexure1", "bySelf"],
+              "variable": [{ "key": "section", "value": "bySelf", "description": "bySelf | bySharing" }]
+            }
+          }
+        },
+        {
+          "name": "Update Row in Annexure 1",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"marketValue\": 10000000,\n  \"encumbrances\": \"Cleared\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/annexure1/bySelf/:rowId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "certificates", "{{certificateId}}", "annexure1", "bySelf", ":rowId"],
+              "variable": [{ "key": "rowId", "value": "REPLACE_WITH_ROW_ID" }]
+            }
+          }
+        },
+        {
+          "name": "Delete Row from Annexure 1",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/annexure1/bySelf/:rowId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "certificates", "{{certificateId}}", "annexure1", "bySelf", ":rowId"],
+              "variable": [{ "key": "rowId", "value": "REPLACE_WITH_ROW_ID" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Annexure 2 — Movable Property",
+      "item": [
+        {
+          "name": "Get Annexure 2",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/annexure2", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "annexure2"] }
+          }
+        },
+        {
+          "name": "Save All Annexure 2",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bankDeposits\": [\n    { \"bankName\": \"SBI\", \"accountNo\": \"1234567890\", \"amount\": 500000 }\n  ],\n  \"investments\": [\n    { \"description\": \"Mutual Funds - Axis Bluechip\", \"amount\": 250000 }\n  ],\n  \"vehicles\": [\n    { \"description\": \"Honda City\", \"registrationNo\": \"TN01AB1234\", \"yearOfPurchase\": 2021, \"value\": 800000 }\n  ],\n  \"jewellery\": [\n    { \"description\": \"Gold jewellery\", \"weightGrams\": 50, \"value\": 300000 }\n  ],\n  \"otherAssets\": [\n    { \"description\": \"LIC Policy\", \"value\": 150000 }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/annexure2", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "annexure2"] }
+          }
+        },
+        {
+          "name": "Update Section in Annexure 2",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"bankName\": \"HDFC\", \"accountNo\": \"0987654321\", \"amount\": 750000 }\n]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/annexure2/:section",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "certificates", "{{certificateId}}", "annexure2", ":section"],
+              "variable": [{ "key": "section", "value": "bankDeposits", "description": "bankDeposits | investments | vehicles | jewellery | otherAssets" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Liabilities",
+      "item": [
+        {
+          "name": "Get Liabilities",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/liabilities", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "liabilities"] }
+          }
+        },
+        {
+          "name": "Save All Liabilities",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"description\": \"Home loan - SBI\",\n      \"lenderName\": \"State Bank of India\",\n      \"outstandingAmount\": 3500000,\n      \"emiAmount\": 35000\n    },\n    {\n      \"description\": \"Car loan - HDFC\",\n      \"lenderName\": \"HDFC Bank\",\n      \"outstandingAmount\": 400000,\n      \"emiAmount\": 12000\n    }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/liabilities", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "liabilities"] }
+          }
+        },
+        {
+          "name": "Add Liability Item",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Personal loan - Axis Bank\",\n  \"lenderName\": \"Axis Bank\",\n  \"outstandingAmount\": 200000,\n  \"emiAmount\": 8000\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/liabilities/item", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "liabilities", "item"] }
+          }
+        },
+        {
+          "name": "Update Liability Item",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"outstandingAmount\": 180000,\n  \"emiAmount\": 7500\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/liabilities/item/:itemId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "certificates", "{{certificateId}}", "liabilities", "item", ":itemId"],
+              "variable": [{ "key": "itemId", "value": "REPLACE_WITH_ITEM_ID" }]
+            }
+          }
+        },
+        {
+          "name": "Delete Liability Item",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/liabilities/item/:itemId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "certificates", "{{certificateId}}", "liabilities", "item", ":itemId"],
+              "variable": [{ "key": "itemId", "value": "REPLACE_WITH_ITEM_ID" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Guarantors",
+      "item": [
+        {
+          "name": "Get Guarantors",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/guarantors", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "guarantors"] }
+          }
+        },
+        {
+          "name": "Save All Guarantors",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"name\": \"Priya Kumar\",\n      \"relationship\": \"Spouse\",\n      \"pan\": \"FGHIJ5678K\",\n      \"address\": \"12, MG Road, Chennai\",\n      \"phone\": \"9876500001\"\n    }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/guarantors", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "guarantors"] }
+          }
+        },
+        {
+          "name": "Add Guarantor Item",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Arun Sharma\",\n  \"relationship\": \"Brother\",\n  \"pan\": \"LMNOP9012Q\",\n  \"address\": \"45, Park Street, Bengaluru\",\n  \"phone\": \"9876500002\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/guarantors/item", "host": ["{{baseUrl}}"], "path": ["api", "v1", "certificates", "{{certificateId}}", "guarantors", "item"] }
+          }
+        },
+        {
+          "name": "Update Guarantor Item",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9999999999\",\n  \"address\": \"Updated Address, Bengaluru\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/guarantors/item/:itemId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "certificates", "{{certificateId}}", "guarantors", "item", ":itemId"],
+              "variable": [{ "key": "itemId", "value": "REPLACE_WITH_ITEM_ID" }]
+            }
+          }
+        },
+        {
+          "name": "Delete Guarantor Item",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/certificates/{{certificateId}}/guarantors/item/:itemId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "certificates", "{{certificateId}}", "guarantors", "item", ":itemId"],
+              "variable": [{ "key": "itemId", "value": "REPLACE_WITH_ITEM_ID" }]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
